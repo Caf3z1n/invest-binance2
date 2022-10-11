@@ -28,7 +28,7 @@ setInterval(async () => {
   
   const barra = data[data.length - 2]
 
-  if(!orderEntrada && !orderProfit /* && barra.rsi < long_rsi && data[data.length - 3].rsi >= long_rsi */) {
+  if(!orderEntrada && !orderProfit && barra.rsi < long_rsi && data[data.length - 3].rsi >= long_rsi) {
     const leverageResponse = await api.leverage({ leverage })
 
     if(!leverageResponse) {
@@ -224,19 +224,3 @@ setInterval(async () => {
     }
   }
 }, env.CRAWLER_INTERVAL);
-
-async function teste() {
-  const response = await api.newOrderLimit({ side: 'BUY', quantity: '0.01', price: '1275' })
-
-  console.log(response)
-}
-
-//teste()
-
-async function teste2() {
-  const response = await api.getOrder({ orderId: '958435071' })
-
-  console.log(response)
-}
-
-//teste2()
