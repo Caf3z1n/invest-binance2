@@ -28,7 +28,7 @@ setInterval(async () => {
   
   const barra = data[data.length - 2]
 
-  if(!orderEntrada && !orderProfit /* && barra.rsi < long_rsi && data[data.length - 3].rsi >= long_rsi */) {
+  if(!orderEntrada && !orderProfit && barra.rsi < long_rsi && data[data.length - 3].rsi >= long_rsi) {
     const leverageResponse = await api.leverage({ leverage })
 
     if(!leverageResponse) {
