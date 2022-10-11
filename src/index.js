@@ -8,6 +8,7 @@ const limite_entrada = env.LIMITE_ENTRADA;
 const long_rsi = env.LONG_RSI;
 const short_rsi = env.SHORT_RSI;
 const profit = env.PROFIT;
+const divisor = env.DIVISOR;
 
 let linhaLimite = 0
 let orderEntrada = 0
@@ -41,7 +42,7 @@ setInterval(async () => {
     }
 
     const price = barra.low
-    const quantity = (((balance / 4) * leverage) / price).toFixed(3)
+    const quantity = (((balance / divisor) * leverage) / price).toFixed(3)
     
     const responseOrder = await api.newOrderLimit({ side: 'BUY', price, quantity })
 
@@ -69,7 +70,7 @@ setInterval(async () => {
     }
 
     const price = Number(barra.high)
-    const quantity = (((balance / 4) * leverage) / price).toFixed(3)
+    const quantity = (((balance / divisor) * leverage) / price).toFixed(3)
 
     const responseOrder = await api.newOrderLimit({ side: 'SELL', price, quantity })
 
