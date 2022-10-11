@@ -28,7 +28,7 @@ async function privateCall(path, data = {}, method = 'GET') {
 
     return response.data
   }catch (err) {
-    //console.log(err)
+    console.log(err)
     return null
   }
 
@@ -123,7 +123,7 @@ async function newOrderLimit({ side, quantity, price }) {
 async function getOrder({ orderId }) {
   try {
     const order = await privateCall('/v1/allOrders', { symbol, orderId })
-    return order[0];
+    return order[order.length - 1];
   }catch (err) {
     return null
   }

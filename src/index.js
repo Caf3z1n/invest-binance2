@@ -28,7 +28,7 @@ setInterval(async () => {
   
   const barra = data[data.length - 2]
 
-  if(!orderEntrada && !orderProfit && barra.rsi < long_rsi && data[data.length - 3].rsi >= long_rsi) {
+  if(!orderEntrada && !orderProfit /* && barra.rsi < long_rsi && data[data.length - 3].rsi >= long_rsi */) {
     const leverageResponse = await api.leverage({ leverage })
 
     if(!leverageResponse) {
@@ -87,8 +87,8 @@ setInterval(async () => {
   }
 
   if(long) {
-    if(orderEntrada) {
-      const order = await api.getOrder({ orderId: orderEntrada })
+    if(orderEntrada && !orderProfit) {
+      const order = await api.getOrder(orderEntrada)
 
       if(!order) {
         return console.log('ERRO: ao buscar ordem limit')
@@ -103,7 +103,7 @@ setInterval(async () => {
         const responseOrderTake = await api.newOrderStopTakeMarket({ side: 'SELL', stopPrice, quantity })
 
         if(!responseOrderTake) {
-          return console.log('LONG: Erro ao criar ordem teke profit!')
+          return console.log('LONG: Erro ao criar ordem take profit!')
         }
   
         orderProfit = responseOrderTake.orderId
@@ -129,8 +129,8 @@ setInterval(async () => {
       }
     }
 
-    if(orderProfit) {
-      const order = await api.getOrder({ orderId: orderProfit })
+    if(orderProfit && !orderEntrada) {
+      const order = await api.getOrder(orderProfit)
   
       if(!order) {
         return console.log('LONG: Erro ao buscar ordem take profit')
@@ -156,7 +156,7 @@ setInterval(async () => {
     }
   }else if(short) {
     if(orderEntrada && !orderProfit) {
-      const order = await api.getOrder({ orderId: orderEntrada })
+      const order = await api.getOrder(orderEntrada)
 
       if(!order) {
         return console.log('ERRO: ao buscar ordem limit')
@@ -197,8 +197,8 @@ setInterval(async () => {
       }
     }
 
-    if(orderProfit) {
-      const order = await api.getOrder({ orderId: orderProfit })
+    if(orderProfit && !orderEntrada) {
+      const order = await api.getOrder(orderProfit)
   
       if(!order) {
         return console.log('SHORT: Erro ao buscar ordem take profit')
@@ -224,3 +224,19 @@ setInterval(async () => {
     }
   }
 }, env.CRAWLER_INTERVAL);
+
+async function teste() {
+  const response = await api.newOrderStopTakeMarket({ side: 'SELL', quantity: '0.004', stopPrice: '1290' })
+
+  console.log(response)
+}
+
+//teste()
+
+async function teste2() {
+  const response = await api.getOrder(8389765548255293000)
+
+  console.log(response)
+}
+
+//teste2()
