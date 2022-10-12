@@ -122,8 +122,15 @@ async function newOrderLimit({ side, quantity, price }) {
 
 async function getOrder({ orderId }) {
   try {
-    const order = await privateCall('/v1/allOrders', { symbol, orderId })
-    return order[order.length - 1];
+    const orders = await privateCall('/v1/allOrders', { symbol, limit: 1000 })
+
+    let orderResponse = {}
+    orders.forEach(order => {
+      if(order.orderId === orderId) {
+        orderResponse = order
+      }
+    });
+    return orderResponse
   }catch (err) {
     return null
   }
